@@ -22,14 +22,14 @@ public class UserController {
     public ResponseEntity<ResponseWrapper> getUsers(){
        // return userService.listAllUsers(); //in UI app
         List<UserDTO> userDTOList = userService.listAllUsers();
-        return ResponseEntity.ok(new ResponseWrapper("Users are successfully retrieves",userDTOList, HttpStatus.OK));
+        return ResponseEntity.ok(new ResponseWrapper("Users are successfully retrieved",userDTOList, HttpStatus.OK));
     }
 
-    @GetMapping("{username}")
+    @GetMapping("/{username}")
     public ResponseEntity<ResponseWrapper> getUserByUserName(@PathVariable("username") String userName){
        // return userService.findByUserName(username); //in UI app
-        UserDTO user = userService.findByUserName(userName);
-        return ResponseEntity.ok(new ResponseWrapper("Users is successfully retrieved",user, HttpStatus.OK));
+        UserDTO userDTO = userService.findByUserName(userName);
+        return ResponseEntity.ok(new ResponseWrapper("User is successfully retrieved",userDTO, HttpStatus.OK));
     }
 
     @PostMapping
@@ -39,15 +39,15 @@ public class UserController {
     }
 
     @PutMapping
-    public ResponseEntity<ResponseWrapper> updateUser(@RequestBody UserDTO user){
-        userService.update(user);
-        return  ResponseEntity.ok(new ResponseWrapper("USer is successfully updated", HttpStatus.OK));
+    public ResponseEntity<ResponseWrapper> updateUser(@RequestBody UserDTO userDTO){
+        userService.update(userDTO);
+        return  ResponseEntity.ok(new ResponseWrapper("User is successfully updated", HttpStatus.OK));
     }
 
-    @DeleteMapping("{username}")
+    @DeleteMapping("/{username}")
     public ResponseEntity<ResponseWrapper> deleteUser(@PathVariable("username") String userName){
         userService.delete(userName);
-        return  ResponseEntity.ok(new ResponseWrapper("User issuccessfully deleted", HttpStatus.OK));
+        return  ResponseEntity.ok(new ResponseWrapper("User is successfully deleted", HttpStatus.OK));
     }
 
 }
