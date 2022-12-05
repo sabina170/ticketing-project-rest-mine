@@ -22,7 +22,7 @@ public class UserController {
     public ResponseEntity<ResponseWrapper> getUsers(){
        // return userService.listAllUsers(); //in UI app
         List<UserDTO> userDTOList = userService.listAllUsers();
-        return ResponseEntity.ok(new ResponseWrapper("Users are successfully retrieves",userDTOList, HttpStatus.OK);
+        return ResponseEntity.ok(new ResponseWrapper("Users are successfully retrieves",userDTOList, HttpStatus.OK));
     }
 
     @GetMapping("{username}")
@@ -32,7 +32,7 @@ public class UserController {
         return ResponseEntity.ok(new ResponseWrapper("Users is successfully retrieved",user, HttpStatus.OK));
     }
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<ResponseWrapper> createUser(@RequestBody UserDTO user){
         userService.save(user);
         return  ResponseEntity.status(HttpStatus.CREATED).body(new ResponseWrapper("User is successfully created",HttpStatus.CREATED));
