@@ -100,11 +100,14 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public List<ProjectDTO> listAllProjectDetails() {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        SimpleKeycloakAccount details = (SimpleKeycloakAccount) authentication.getDetails();
-        String username = details.getKeycloakSecurityContext().getToken().getPreferredUsername();
+        //UserDTO currentUserDTO = userService.findByUserName("harold@manager.com");
 
-        UserDTO currentUserDTO = userService.findByUserName("harold@manager.com");
+        //instead of hard code, I capture the user by security, I retrieve it from keycloak from authorization.
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        SimpleKeycloakAccount details = (SimpleKeycloakAccount) authentication.getDetails(); // get whole user object from keycloak
+        String username = details.getKeycloakSecurityContext().getToken().getPreferredUsername(); // from the user object->it is going to token->get username
+
+        UserDTO currentUserDTO = userService.findByUserName(username);
 
         User user = userMapper.convertToEntity(currentUserDTO);
 
