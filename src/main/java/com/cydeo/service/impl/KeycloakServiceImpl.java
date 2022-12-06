@@ -30,12 +30,12 @@ public class KeycloakServiceImpl implements KeycloakService {
 
     @Override
     public Response userCreate(UserDTO userDTO) {
-
+        //
         CredentialRepresentation credential = new CredentialRepresentation();
         credential.setType(CredentialRepresentation.PASSWORD);
         credential.setTemporary(false);
         credential.setValue(userDTO.getPassWord());
-
+        //This class I use for setting stuff from Keycloak, userDto - is coming from Postman:
         UserRepresentation keycloakUser = new UserRepresentation();
         keycloakUser.setUsername(userDTO.getUserName());
         keycloakUser.setFirstName(userDTO.getFirstName());
@@ -45,7 +45,7 @@ public class KeycloakServiceImpl implements KeycloakService {
         keycloakUser.setEmailVerified(true);
         keycloakUser.setEnabled(true);
 
-
+        //same concept with DB - first we need to open transaction, Here first we need to create one instance of keycloak:
         Keycloak keycloak = getKeycloakInstance();
 
         RealmResource realmResource = keycloak.realm(keycloakProperties.getRealm());
@@ -54,10 +54,11 @@ public class KeycloakServiceImpl implements KeycloakService {
         // Create Keycloak user
         Response result = usersResource.create(keycloakUser);
 
+        //whenever keycloak cretes one user, it is giving one unique id code
         String userId = getCreatedId(result);
         ClientRepresentation appClient = realmResource.clients()
                 .findByClientId(keycloakProperties.getClientId()).get(0);
-
+        //it is going to keycloak, checks the role:
         RoleRepresentation userClientRole = realmResource.clients().get(appClient.getId()) //
                 .roles().get(userDTO.getRole().getDescription()).toRepresentation();
 
@@ -85,6 +86,7 @@ public class KeycloakServiceImpl implements KeycloakService {
     }
 
     private Keycloak getKeycloakInstance(){
+        //I am giving all info from app.properties to keycloak:
         return Keycloak.getInstance(keycloakProperties.getAuthServerUrl(),
                 keycloakProperties.getMasterRealm(), keycloakProperties.getMasterUser()
                 , keycloakProperties.getMasterUserPswd(), keycloakProperties.getMasterClient());
