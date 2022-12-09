@@ -54,7 +54,7 @@ public class KeycloakServiceImpl implements KeycloakService {
         // Create Keycloak user
         Response result = usersResource.create(keycloakUser);
 
-        //whenever keycloak cretes one user, it is giving one unique id code
+        //whenever keycloak creates one user, it is giving one unique id code
         String userId = getCreatedId(result);
         ClientRepresentation appClient = realmResource.clients()
                 .findByClientId(keycloakProperties.getClientId()).get(0);
